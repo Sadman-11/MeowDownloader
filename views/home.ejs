@@ -1,93 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>MeowDownloader - Social Media Downloader</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="/styles.css" />
-  </head>
-  <body>
-    <div class="container">
-      <header>
-        <h1 class="glitch" data-text="MeowDownloader">MeowDownloader</h1>
-        <p class="subtitle">Social Media Downloader</p>
-      </header>
 
-      <main>
-        <section class="downloader">
-          <h2>Initiate Extraction</h2>
-          <form id="download-form">
-            <input
-              type="url"
-              id="url-input"
-              placeholder="Enter target URL"
-              required
-            />
-            <button type="submit">Extract</button>
-          </form>
-          <div id="result" class="result-container"></div>
-        </section>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MeowDownloader - Social Media Downloader</title>
 
-        <section class="features">
-          <h2>Core Functions</h2>
-          <ul>
-            <li>Multi-platform support</li>
-            <li>High-speed extraction</li>
-            <li>Secure and anonymous</li>
-            <li>Advanced filtering options</li>
-          </ul>
-        </section>
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:title" content="MeowDownloader - Social Media Downloader">
+  <meta property="og:description"
+    content="Easily download videos from YouTube, Facebook, TikTok, and over 1000 other sites, including adult platforms, using our powerful yt-dlp downloader. Fast, high-quality video downloads with just a few clicks.">
+  <meta property="og:image" content="/static/img/thumbnail.jpg">
+  <meta property="og:url" content="https://meow.misfitsdev.pro">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="MisfitsDev">
+  <meta property="og:locale" content="en_US">
+  <meta property="fb:app_id" content="841363061109972" />
 
-        <section class="api-info">
-          <h2>API Integration</h2>
-          <p>Harness the power of MeowDownloader in your own systems.</p>
-          <a href="/docs" class="neon-button">Access API Docs</a>
-        </section>
-      </main>
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="MeowDownloader - Social Media Downloader">
+  <meta name="twitter:description"
+    content="Easily download videos from YouTube, Facebook, TikTok, and over 1000 other sites, including adult platforms, using our powerful yt-dlp downloader. Fast, high-quality video downloads with just a few clicks.">
+  <meta name="twitter:image" content="/img/thumbnail.jpg">
+  <meta name="twitter:site" content="@tasU">
 
-      <footer>
-        <div class="footer-content">
-          <div class="developer-info">
-            <h3>Developer</h3>
-            <p>
-              Author: <a class="neon-text" href="https://github.com/tas33n"
-                >Tas33n</a
-              >
-            </p>
-            <p>Version: <span class="neon-text">1.0.0</span></p>
-            <p>Last Update: <span class="neon-text">2024.10.27</span></p>
-          </div>
-          <div class="links">
-            <a
-              href="https://github.com/tas33n/MeowDownloader"
-              target="_blank"
-              rel="noopener noreferrer"
-              >GitHub Repo</a
-            >
-            <a href="/docs">API Docs</a>
-            <a href="#" id="contact-trigger">Contact</a>
-          </div>
-        </div>
-        <p class="copyright">&copy; 2024 Misfitsdev. All rights reserved.</p>
-      </footer>
-    </div>
+  <!-- General Meta Tags -->
+  <meta name="description"
+    content="Easily download videos from YouTube, Facebook, TikTok, and over 1000 other sites, including adult platforms, using our powerful yt-dlp downloader. Fast, high-quality video downloads with just a few clicks.">
+  <meta name="author" content="Tas33n">
+  <meta name="keywords"
+    content="social media downloader, video downloader, download videos, misfitsDev, Tas33n, download videos from social media, video downloader, download videos, social media downloader, yt-dlp, YouTube video download, Facebook video download, TikTok video download, adult site video download, high-quality video download, download from 1000+ sites">
 
-    <div id="contact-modal" class="modal">
-      <div class="modal-content">
-        <span class="close">&times;</span>
-        <h2>Contact the Developer</h2>
-        <form id="contact-form">
-          <input type="email" placeholder="Your email" required />
-          <textarea placeholder="Your message" required></textarea>
-          <button type="submit">Send</button>
+  <link rel="icon" type="image/x-icon" href="/img/icon.png">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1 class="glitch" data-text="MeowDownloader">MeowDownloader</h1>
+      <p class="subtitle">Social Media Downloader</p>
+    </header>
+
+    <main>
+      <section class="downloader">
+        <h2>Initiate Extraction</h2>
+        <form id="download-form">
+          <input type="url" id="url-input" placeholder="Enter target URL" required />
+          <button type="submit">Extract</button>
         </form>
-      </div>
-    </div>
+        <div id="result" class="result-container"></div>
+      </section>
 
-    <script src="/script.js"></script>
-  </body>
+      <section class="features">
+        <h2>Core Functions</h2>
+        <ul>
+          <li>Multi-platform support</li>
+          <li>High-speed extraction</li>
+          <li>Secure and anonymous</li>
+          <li>Advanced filtering options</li>
+        </ul>
+      </section>
+
+      <section class="api-info">
+        <h2>API Integration</h2>
+        <p>Harness the power of MeowDownloader in your own systems.</p>
+        <a href="/docs" class="neon-button">Access API Docs</a>
+      </section>
+    </main>
+
+    <footer>
+      <div class="footer-content">
+        <div class="developer-info">
+          <h3>Developer</h3>
+          <p>
+            Author: <a class="neon-text" href="https://github.com/tas33n">Tas33n</a>
+          </p>
+          <p>Version: <span class="neon-text">1.0.0</span></p>
+          <p>Last Update: <span class="neon-text">2024.10.27</span></p>
+        </div>
+        <div class="links">
+          <a href="https://github.com/tas33n/MeowDownloader" target="_blank" rel="noopener noreferrer">GitHub Repo</a>
+          <a href="/docs">API Docs</a>
+          <a href="#" id="contact-trigger">Contact</a>
+        </div>
+      </div>
+      <p class="copyright">&copy; 2024 Misfitsdev. All rights reserved.</p>
+    </footer>
+  </div>
+
+  <div id="contact-modal" class="modal">
+    <div class="modal-content">
+      <span class="close">&times;</span>
+      <h2>Contact the Developer</h2>
+      <form id="contact-form">
+        <input type="email" placeholder="Your email" required />
+        <textarea placeholder="Your message" required></textarea>
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="/script.js"></script>
+</body>
+
 </html>
