@@ -7,83 +7,68 @@ const express = require("express");
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Serve static files
 app.use(express.static(path.join(__dirname, "public")));
 
 // Set up EJS as the view engine
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
-// Path to the binary
+// Paths to binary and cookies file
 const binDir = path.join(process.cwd(), "bin");
-const ytDlpBinaryPath = path.join(
-  binDir,
-  process.platform === "win32" ? "yt-dlp.exe" : "yt-dlp"
-);
+const ytDlpBinaryPath = path.join(binDir, process.platform === "win32" ? "yt-dlp.exe" : "yt-dlp");
 const cookieFilePath = path.join(binDir, "cookies.txt");
 
-async function downloadYtDlp() {
+const ytDlpUrl = process.platform === "win32"
+  ? "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe"
+  : "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp";
+
+const cookiesUrl = process.env.COOKIE_FILE || "";
+
+async function downloadFile(url, outputPath) {
+  const writer = fs.createWriteStream(outputPath);
+
+  const response = await axios.get(url, { responseType: "stream" });
+  response.data.pipe(writer);
+
+  return new Promise((resolve, reject) => {
+    writer.on("finish", resolve);
+    writer.on("error", reject);
+  });
+}
+
+async function downloadYtDlpAndCookies() {
   if (!fs.existsSync(binDir)) {
     fs.mkdirSync(binDir);
   }
 
-  let url = "";
-  if (process.platform === "win32") {
-    url =
-      "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe";
-  } else {
-    url = "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp";
-  }
-
-  const writer = fs.createWriteStream(ytDlpBinaryPath);
-
   try {
-    const response = await axios.get(url, {
-      responseType: "stream",
-    });
+    console.log("Downloading yt-dlp...");
+    await downloadFile(ytDlpUrl, ytDlpBinaryPath);
+    if (process.platform !== "win32") {
+      fs.chmodSync(ytDlpBinaryPath, "755");
+    }
+    console.log("yt-dlp downloaded successfully.");
 
-    const totalLength = response.headers["content-length"];
-    let downloadedLength = 0;
-
-    response.data.on("data", (chunk) => {
-      downloadedLength += chunk.length;
-      const progress = ((downloadedLength / totalLength) * 100).toFixed(2);
-      process.stdout.write(`Downloading yt-dlp: ${progress}%\r`);
-    });
-
-    response.data.pipe(writer);
-
-    return new Promise((resolve, reject) => {
-      writer.on("finish", () => {
-        if (process.platform !== "win32") {
-          fs.chmodSync(ytDlpBinaryPath, "755");
-        }
-        console.log("\nDownload complete.");
-        resolve();
-      });
-      writer.on("error", (err) => {
-        fs.unlink(ytDlpBinaryPath, () => {});
-        reject(`Failed to download yt-dlp: ${err.message}`);
-      });
-    });
+    console.log("Downloading cookies.txt...");
+    await downloadFile(cookiesUrl, cookieFilePath);
+    console.log("cookies.txt downloaded successfully.");
   } catch (error) {
-    fs.unlink(ytDlpBinaryPath, () => {});
-    throw new Error(`Failed to download yt-dlp: ${error.message}`);
+    console.error("Error downloading files:", error.message);
+    throw error;
   }
 }
 
 // Function to check and download yt-dlp if necessary
-async function checkAndDownloadYtDlp() {
-  if (!fs.existsSync(ytDlpBinaryPath)) {
-    console.log("yt-dlp not found, downloading...");
-    await downloadYtDlp();
+async function checkAndDownloadYtDlpAndCookies() {
+  if (!fs.existsSync(ytDlpBinaryPath) || !fs.existsSync(cookieFilePath)) {
+    console.log("yt-dlp or cookies.txt not found, downloading...");
+    await downloadYtDlpAndCookies();
   }
 }
 
-// Function to run yt-dlp with specified URL and format options
 async function runYtDlp(url) {
   try {
-    await checkAndDownloadYtDlp();
+    await checkAndDownloadYtDlpAndCookies();
 
     const args = [
       "--cookies",
@@ -144,9 +129,10 @@ app.get("/ytdl", async (req, res) => {
 
   try {
     const result = await runYtDlp(url);
+    console.log(result);
     res.json({ success: true, data: result });
   } catch (error) {
-    console.log(error);
+    console.log("bal",error);
     res.status(500).json({ success: false, error: error.message });
   }
 });
